@@ -1,0 +1,32 @@
+import { WebSocketServer,WebSocket } from "ws";
+import { MessageModel } from "../models/message";
+import { userModel } from "../models/user";
+
+export class chatController {
+  
+  private wss:WebSocketServer
+
+  constructor(wss:WebSocketServer){
+    this.wss = wss
+  }
+      
+  handleClients(){
+   try{
+    this.wss.on('connection',async (ws:WebSocket)=>{
+      
+       ws.on('message',async(message)=>{
+        console.log(`this is me : ${message}`)
+          const parsmessage = `${message}`
+      
+        await MessageModel.create(parsmessage);
+
+      })
+
+    })
+    }catch (err){
+      return {"message":err}
+    }
+
+  }
+
+}
